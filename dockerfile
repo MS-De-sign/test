@@ -29,7 +29,8 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com 
 RUN apt-get update && apt-get install -y grafana
 
 # Installation von Webmin
-RUN apt-get update && apt-get install -y webmin
+RUN curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
+RUN sh webmin-setup-repo.sh
 
 # Installation von Telegram-CLI (via git)
 RUN apt-get install -y telegraf
