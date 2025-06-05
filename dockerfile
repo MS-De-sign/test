@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y grafana
 # Installation von Webmin
 RUN curl -o webmin-setup-repo.sh https://raw.githubusercontent.com/webmin/webmin/master/webmin-setup-repo.sh
 RUN sh webmin-setup-repo.sh
+RUN apt-get install webmin --install-recommends
 
 # Installation von Telegram-CLI (via git)
 RUN apt-get install -y telegraf
