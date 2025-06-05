@@ -10,9 +10,14 @@ RUN apt-get update && apt-get install -y \
     gnupg2
 
 # Füge den neuen InfluxDB GPG-Schlüssel hinzu
-wget -q https://repos.influxdata.com/influxdb.key
-echo '23a1c8836f0afc5ed24e0486339d7cc8f6790b83886c4c96995b88a061c5bb5d influxdb.key' | sha256sum -c && cat influxdb.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/influxdb.gpg > /dev/null
-echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdb.gpg] https://repos.influxdata.com/debian stable main' | tee /etc/apt/sources.list.d/influxdata.list
+RUN curl --silent --location -O \
+    https://repos.influxdata.com/influxdata-archive.key
+RUN echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+    | sha256sum --check - && cat influxdata-archive.key \
+    | gpg --dearmor \
+    | tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
+    && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
+    | tee /etc/apt/sources.list.d/influxdata.list
 
 # Aktualisiere Paketlisten und installiere InfluxDB
 RUN apt-get update && apt-get install -y influxdb2 influxdb2-cli
